@@ -13,7 +13,12 @@ module Pkgr
       end
 
       def runner
-        @runner ||= Runner.new("sysv", "lsb-3.1", "update-rc.d")
+        @runner ||= case release
+        when /^8/
+          Runner.new("systemd", "default", "systemctl")
+        else
+          Runner.new("sysv", "lsb-3.1", "update-rc.d")
+        end
       end
 
       def package_test_command(package)
@@ -56,19 +61,6 @@ module Pkgr
 
       def debtemplates
         @debtemplates ||= Tempfile.new("debtemplates")
-      end
-
-      def add_addon(addon)
-        # make a debian package out of the addon
-        Dir.chdir(addon.dir) do
-          make_package = Mixlib::ShellOut.new %{dpkg-buildpackage -b -d}
-          make_package.logger = Pkgr.logger
-          make_package.run_command
-          make_package.error!
-        end
-        FileUtils.mv(Dir.glob(File.join(File.dirname(addon.dir), "*.deb")), Dir.pwd)
-        # return name of the dependency
-        addon.debian_dependency_name
       end
 
       class DebianFpmCommand < FpmCommand

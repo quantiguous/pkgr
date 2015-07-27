@@ -2,9 +2,9 @@
 
 ## Goal
 
-Make debian or rpm packages out of any app, including init script, logrotate, etc. Excellent way to distribute apps or command line tools without complicated installation instructions.
+Make debian or rpm packages out of any app, including init script, crons, logrotate, etc. Excellent way to distribute apps or command line tools without complicated installation instructions.
 
-Hosted service available at <https://packager.io/>.
+Hosted service available at <https://packager.io/>. Free for OpenSource apps.
 
 ## Officially supported languages
 
@@ -12,15 +12,19 @@ Hosted service available at <https://packager.io/>.
 * NodeJS
 * Go
 
-You can also point to other buildpacks ([doc](https://packager.io/documentation/reference/the-pkgryml-file.html#buildpack)). They may just work.
+You can also point to other buildpacks ([doc](https://packager.io/documentation/customizing-the-build/#buildpack)). They may just work.
 
 ## Supported distributions (64bits only)
 
 * Ubuntu 14.04 ("trusty")
 * Ubuntu 12.04 ("precise")
+* Debian 8 ("jessie")
 * Debian 7 ("wheezy")
-* Centos 6
+* RHEL/CentOS 7
+* RHEL/CentOS 6
+* Suse Linux Enterprise Server 12
 * Fedora 20
+* Amazon Linux AMI 2014
 
 ## Examples
 
@@ -145,6 +149,14 @@ If you get the following error `ERROR:  While executing gem ... (ArgumentError) 
     export LANG=en_US.UTF-8
     export LC_ALL=en_US.UTF-8
     sudo gem install pkgr
+
+Looking for the init script? It is created the first time you run this command
+
+    sudo my-app scale web=1 worker=1
+
+Issue getting nokogiri to compile? Try the following based on this [comment](https://github.com/crohr/pkgr/issues/60#issuecomment-96631181):
+
+    bundle config --local build.nokogiri "--use-system-libraries --with-xml2-include=/usr/include/libxml2"
 
 ## Authors
 
